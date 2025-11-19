@@ -1,7 +1,7 @@
 import { El } from "../../utils/el.js";
 import { router } from "../../utils/router.js";
 
-export function Login() {
+export function Signup() {
 	let usernameValue = "";
 	let passwordValue = "";
 	let passwordVisible = false;
@@ -33,7 +33,7 @@ export function Login() {
 	//---------------------------------
 	async function handleSubmit() {
 		try {
-			const response = await fetch("{{baseUrl}}/auth/login", {
+			const response = await fetch("{{baseUrl}}/auth/signup", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
@@ -47,22 +47,21 @@ export function Login() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				alert(data.message || "Login failed");
+				alert(data.message || "Signup failed");
 				return;
 			}
 
-			console.log("Login success:", data);
+			console.log("Signup success:", data);
 
-			localStorage.setItem("token", data.token);
-
-			// router.navigate("/home");
+			router.navigate("/Login");
+			("/login");
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");
 		}
 	}
 
-	const formLogin = El({
+	const formSignUp = El({
 		element: "div",
 		className: "min-h-screen bg-white pb-20 flex items-center justify-start",
 		children: [
@@ -80,7 +79,7 @@ export function Login() {
 
 					El({
 						element: "h1",
-						innerText: "Login to Your Account",
+						innerText: "Signup to Your Account",
 						className: "text-3xl font-bold mb-8",
 					}),
 
@@ -153,15 +152,15 @@ export function Login() {
 						],
 					}),
 
-					//  signup
+					//  login
 					El({
 						element: "div",
-						innerText: "signup",
+						innerText: "Login",
 						className: "mt-2 text-black cursor-pointer underline",
 						eventListener: [
 							{
 								event: "click",
-								callback: () => router.navigate("/Signup"),
+								callback: () => router.navigate("/Login"),
 							},
 						],
 					}),
@@ -186,5 +185,5 @@ export function Login() {
 		],
 	});
 
-	return formLogin;
+	return formSignUp;
 }
