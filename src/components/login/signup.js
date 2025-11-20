@@ -33,14 +33,14 @@ export function Signup() {
 	//---------------------------------
 	async function handleSubmit() {
 		try {
-			const response = await fetch("{{baseUrl}}/auth/signup", {
+			const response = await fetch("http://localhost:3000/auth/signup", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					username: username,
-					password: password,
+					username: usernameValue,
+					password: passwordValue,
 				}),
 			});
 
@@ -63,12 +63,13 @@ export function Signup() {
 
 	const formSignUp = El({
 		element: "div",
-		className: "min-h-screen bg-white pb-20 flex items-center justify-start",
+		className:
+			"w-[428px] h-[926px] bg-white pb-20 flex items-center justify-start ",
 		children: [
 			El({
 				element: "div",
 				className:
-					"flex flex-col items-center gap-5 w-[428px] h-[926px] p-6 relative",
+					"w-[428px] h-[926px] flex flex-col items-center gap-5  p-6 relative",
 
 				children: [
 					El({
@@ -90,12 +91,12 @@ export function Signup() {
 						children: [
 							El({
 								element: "img",
-								className: "absolute top-3 left-2 z-10  ",
-								src: "/public/Vector (5).svg",
+								className: "absolute top-3 left-2 z-10 opacity-50 ",
+								src: "/public/Vector (4).svg",
 							}),
 							El({
 								element: "input",
-								className: "bg-gray-100  rounded-sm w-full px-8 py-1",
+								className: "bg-gray-100  rounded-sm w-full px-8 py-2",
 								placeholder: "username",
 								id: "username",
 								eventListener: [
@@ -106,6 +107,17 @@ export function Signup() {
 											updateButtonState();
 										},
 									},
+									El({
+										element: "img",
+										src: "/public/Vector (3).svg",
+										className: "absolute left-6 top-4",
+										eventListener: [
+											{
+												event: "click",
+												callback: () => router.navigate("/swiper"),
+											},
+										],
+									}),
 								],
 							}),
 						],
@@ -119,11 +131,11 @@ export function Signup() {
 							El({
 								element: "img",
 								className: "absolute top-3 left-2 z-10",
-								src: "/public/input-prefix.svg",
+								src: "/public/lock-fill.svg",
 							}),
 							El({
 								element: "input",
-								className: "bg-gray-100  rounded-sm w-full px-8 py-1",
+								className: "bg-gray-100  rounded-sm w-full px-8 py-2",
 								placeholder: "password",
 								id: "password",
 								type: "password",
@@ -171,7 +183,7 @@ export function Signup() {
 						innerText: "sign up",
 						id: "submit-btn",
 						className:
-							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl mt-4 absolute bottom-12",
+							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl mt-4 absolute bottom-5",
 						attr: { disabled: true },
 						eventListener: [
 							{

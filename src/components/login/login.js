@@ -33,14 +33,15 @@ export function Login() {
 	//---------------------------------
 	async function handleSubmit() {
 		try {
-			const response = await fetch("{{baseUrl}}/auth/login", {
+			const response = await fetch("http://localhost:3000/auth/login", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
+				withCredentials: true,
 				body: JSON.stringify({
-					username: username,
-					password: password,
+					username: usernameValue,
+					password: passwordValue,
 				}),
 			});
 
@@ -51,11 +52,9 @@ export function Login() {
 				return;
 			}
 
-			console.log("Login success:", data);
+			console.log("Login success");
 
-			localStorage.setItem("token", data.token);
-
-			// router.navigate("/home");
+			router.navigate("/home");
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");
@@ -64,12 +63,13 @@ export function Login() {
 
 	const formLogin = El({
 		element: "div",
-		className: "min-h-screen bg-white pb-20 flex items-center justify-start",
+		className:
+			"w-[428px] h-[926px] bg-white pb-20 flex items-center justify-start ",
 		children: [
 			El({
 				element: "div",
 				className:
-					"flex flex-col items-center gap-5 w-[428px] h-[926px] p-6 relative",
+					"w-[428px] h-[926px] flex flex-col items-center gap-5 p-6 relative",
 
 				children: [
 					El({
@@ -91,12 +91,12 @@ export function Login() {
 						children: [
 							El({
 								element: "img",
-								className: "absolute top-3 left-2 z-10  ",
-								src: "/public/Vector (5).svg",
+								className: "absolute top-3 left-2 z-10 opacity-50 ",
+								src: "/public/Vector (4).svg",
 							}),
 							El({
 								element: "input",
-								className: "bg-gray-100  rounded-sm w-full px-8 py-1",
+								className: "bg-gray-100  rounded-sm w-full px-8 py-2",
 								placeholder: "username",
 								id: "username",
 								eventListener: [
@@ -119,12 +119,13 @@ export function Login() {
 						children: [
 							El({
 								element: "img",
-								className: "absolute top-3 left-2 z-10",
-								src: "/public/input-prefix.svg",
+								className:
+									"absolute top-3 left-2 z-10 opacity-50  hover:opacity-100",
+								src: "/public/lock-fill.svg",
 							}),
 							El({
 								element: "input",
-								className: "bg-gray-100  rounded-sm w-full px-8 py-1",
+								className: "bg-gray-100  rounded-sm w-full px-8 py-2",
 								placeholder: "password",
 								id: "password",
 								type: "password",
@@ -172,7 +173,7 @@ export function Login() {
 						innerText: "sign up",
 						id: "submit-btn",
 						className:
-							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl mt-4 absolute bottom-12",
+							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl  absolute bottom-5",
 						attr: { disabled: true },
 						eventListener: [
 							{
