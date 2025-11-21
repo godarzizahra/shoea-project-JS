@@ -1,7 +1,7 @@
 import { El } from "../../utils/el.js";
 import { router } from "../../utils/router.js";
 
-export function Login() {
+export function Signup() {
 	let usernameValue = "";
 	let passwordValue = "";
 	let passwordVisible = false;
@@ -33,12 +33,11 @@ export function Login() {
 	//---------------------------------
 	async function handleSubmit() {
 		try {
-			const response = await fetch("http://localhost:3000/auth/login", {
+			const response = await fetch("http://localhost:3000/auth/signup", {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
-				withCredentials: true,
 				body: JSON.stringify({
 					username: usernameValue,
 					password: passwordValue,
@@ -48,22 +47,21 @@ export function Login() {
 			const data = await response.json();
 
 			if (!response.ok) {
-				alert(data.message || "Login failed");
+				alert(data.message || "Signup failed");
 				return;
 			}
-			document.cookie = `token=${data.token}; path=/; max-age=${
-				7 * 24 * 60 * 60
-			}`;
-			console.log("Login success");
 
-			router.navigate("/home");
+			console.log("Signup success:", data);
+
+			router.navigate("/Login");
+			("/login");
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");
 		}
 	}
 
-	const formLogin = El({
+	const formSignUp = El({
 		element: "div",
 		className:
 			"w-[428px] h-[926px] bg-white pb-20 flex items-center justify-start ",
@@ -71,7 +69,7 @@ export function Login() {
 			El({
 				element: "div",
 				className:
-					"w-[428px] h-[926px] flex flex-col items-center gap-5 p-6 relative",
+					"w-[428px] h-[926px] flex flex-col items-center gap-5  p-6 relative",
 
 				children: [
 					El({
@@ -82,7 +80,7 @@ export function Login() {
 
 					El({
 						element: "h1",
-						innerText: "Login to Your Account",
+						innerText: "Signup to Your Account",
 						className: "text-3xl font-bold mb-8",
 					}),
 
@@ -109,6 +107,17 @@ export function Login() {
 											updateButtonState();
 										},
 									},
+									El({
+										element: "img",
+										src: "/public/Vector (3).svg",
+										className: "absolute left-6 top-4",
+										eventListener: [
+											{
+												event: "click",
+												callback: () => router.navigate("/swiper"),
+											},
+										],
+									}),
 								],
 							}),
 						],
@@ -121,8 +130,7 @@ export function Login() {
 						children: [
 							El({
 								element: "img",
-								className:
-									"absolute top-3 left-2 z-10 opacity-50  hover:opacity-100",
+								className: "absolute top-3 left-2 z-10",
 								src: "/public/lock-fill.svg",
 							}),
 							El({
@@ -156,15 +164,15 @@ export function Login() {
 						],
 					}),
 
-					//  signup
+					//  login
 					El({
 						element: "div",
-						innerText: "signup",
+						innerText: "Login",
 						className: "mt-2 text-black cursor-pointer underline",
 						eventListener: [
 							{
 								event: "click",
-								callback: () => router.navigate("/Signup"),
+								callback: () => router.navigate("/Login"),
 							},
 						],
 					}),
@@ -175,7 +183,7 @@ export function Login() {
 						innerText: "sign up",
 						id: "submit-btn",
 						className:
-							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl  absolute bottom-5",
+							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl mt-4 absolute bottom-5",
 						attr: { disabled: true },
 						eventListener: [
 							{
@@ -189,5 +197,5 @@ export function Login() {
 		],
 	});
 
-	return formLogin;
+	return formSignUp;
 }
