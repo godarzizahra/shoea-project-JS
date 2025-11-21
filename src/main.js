@@ -1,5 +1,4 @@
-import { Signup } from "./components/login/signup.js";
-import { LoginPage } from "./pages/login/login.js";
+import { Homepage } from "./pages/home/home.js";
 import "./style/style.css";
 import { router } from "./utils/router.js";
 
@@ -16,9 +15,9 @@ app.appendChild(pageContainer);
 // }
 // router.addRoute("/welcome", welcome);
 // router.addRoute("/swiper", () => swiper());
-router.addRoute("/Login", LoginPage);
-router.navigate("/Login");
-router.addRoute("/Signup", Signup);
-// router.addRoute("/Home", Homepage);
-// router.navigate("/Home");
+// router.addRoute("/Login", LoginPage);
+// router.navigate("/Login");
+// router.addRoute("/Signup", Signup);
+router.addRoute("/Home", Homepage);
+router.navigate("/Home");
 router.init(pageContainer);
