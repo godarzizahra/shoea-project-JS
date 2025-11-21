@@ -51,7 +51,9 @@ export function Login() {
 				alert(data.message || "Login failed");
 				return;
 			}
-
+			document.cookie = `token=${data.token}; path=/; max-age=${
+				7 * 24 * 60 * 60
+			}`;
 			console.log("Login success");
 
 			router.navigate("/home");
