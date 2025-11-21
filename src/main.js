@@ -19,4 +19,6 @@ app.appendChild(pageContainer);
 router.addRoute("/Login", LoginPage);
 router.navigate("/Login");
 router.addRoute("/Signup", Signup);
+// router.addRoute("/Home", Homepage);
+// router.navigate("/Home");
 router.init(pageContainer);

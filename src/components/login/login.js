@@ -53,9 +53,11 @@ export function Login() {
 
 			console.log("Login success:", data);
 
+
 			localStorage.setItem("token", data.token);
 
-			// router.navigate("/home");
+			router.navigate("/Home");
+
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");

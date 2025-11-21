@@ -71,6 +71,17 @@ export function Signup() {
 					"flex flex-col items-center gap-5 w-[428px] h-[926px] p-6 relative",
 
 				children: [
+					// El({
+					// 	element: "img",
+					// 	src: "/public/Vector (3).svg",
+					// 	className: "absolute left-6 top-4",
+					// 	eventListener: [
+					// 		{
+					// 			event: "click",
+					// 			callback: () => router.navigate("/swiper"),
+					// 		},
+					// 	],
+					// }),
 					El({
 						element: "img",
 						src: "/public/logo.png",
@@ -118,8 +129,9 @@ export function Signup() {
 						children: [
 							El({
 								element: "img",
-								className: "absolute top-3 left-2 z-10",
-								src: "/public/input-prefix.svg",
+
+								className: "absolute top-3 left-2 z-10 opacity-50",
+								src: "/public/lock-fill.svg",
 							}),
 							El({
 								element: "input",
