@@ -78,7 +78,7 @@ const selectBerand = El({
 //cart product
 const cartProducts = El({
 	element: "div",
-	className: "grid grid-cols-2 ",
+	className: "grid grid-cols-2 h-[300px]",
 	children: [
 		El({
 			element: "div",
@@ -99,6 +99,18 @@ const cartProducts = El({
 					innerText: "$ 85.00",
 				}),
 			],
+		}),
+	],
+});
+//infinity
+const infinityLink = El({
+	element: "div",
+	className: "flex items-center justify-end",
+	children: [
+		El({
+			element: "span",
+			innerText: "Infinity Scrolling for Pagination",
+			className: "font-bold",
 		}),
 	],
 });
@@ -202,7 +214,14 @@ export function Home() {
 		element: "div",
 		className:
 			"w-[428px] h-[926px] bg-white pb-20 flex flex-col items-center justify-start p-2",
-		children: [headerHome, search, selectBerand, cartProducts, menuHome],
+		children: [
+			headerHome,
+			search,
+			selectBerand,
+			cartProducts,
+			infinityLink,
+			menuHome,
+		],
 	});
 
 	return home;
