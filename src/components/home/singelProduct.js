@@ -67,6 +67,7 @@ export function singelProduct() {
   })
 	//description-product
   const descriptionProduct=El({
+
     element:'div',
     className:'flex flex-col gap-2',
     children:[
@@ -81,10 +82,142 @@ export function singelProduct() {
     ]
   })
 	//size-color-product
+  const productOption=El({
+    element:'div',
+    className:'',
+    children:[
+      El({
+        element:'div',
+        className:'flex',
+        children:[
+          El({
+            element:'span',
+            innerText:'Size',
+            className:'font-bold',
+          }),
+          El({
+            element:'span',
+            innerText:'Color',
+            className:'font-bold',
+          })
+        ]
+      }),
+      El({
+        element:"div",
+        className:'flex gap-5',
+        children:[
+          El({
+            element:'div',
+            className:'flex',
+            children:[
+              El({
+                element:'div',
+                innerText:'40',
+                className:'p-3 text-gray-300 border-2 border-gray-300 rounded-full text-center',
+              }),
+              El({
+                element:'div',
+                innerText:'42',
+                className:'p-3 text-gray-300 border-2 border-gray-300 rounded-full text-center',
+              }),
+              El({
+                element:'div',
+                innerText:'43',
+                className:'p-3 text-gray-300 border-2 border-gray-300 rounded-full text-center',
+              }),
+            ],
+          }),
+           El({
+            element:'div',
+            className:'flex',
+            children:[
+              El({
+                element:'div',
+                className:'rounded-full bg-gray-100 w-3 h-3 ',
+              }),
+              El({
+                element:'div',
+               className:'rounded-full w-3 h-3 bg-gray-700',
+              }),
+              El({
+                element:'div',
+                className:'rounded-full w-3 h-3 bg-pink-500',
+              }),
+              El({
+                element:'div',
+                className:'rounded-full w-3 h-3 bg-brown-700',
+              }),
+               El({
+                element:'div',
+                className:'rounded-full w-3 h-3 bg-blue-600',
+              }),
+            ],
+          }),
+        ]
+      })
+    ]
 
+  })
 	//quantity
-
+const quantityProduct=El({
+  element:'div',
+  className:'flex gap-5',
+  children:[
+    El({
+      element:'span',
+      innerText:'Quantity'
+    }),
+    El({
+      element:'div',
+      className:'bg-gray-300 p-3',
+      children:[
+        El({
+          element:'span',
+          innerText:'-',
+        }),
+        El({
+          element:'span',
+          innerText:'2',
+        }),
+        El({
+          element:'span',
+          innerText:'+',
+        }),
+      ]
+    })
+  ]
+})
 	//total_price
+  const totalPrice=El({
+    element:'div',
+    className:'flex ',
+    children:[
+      El({
+        element:'div',
+        className:'flex flex-col gap-2',
+        children:[
+          El({
+            element:'span',
+            innerText:'Total price',
+          }),
+          El({
+            element:'span',
+            innerText:'$240.00',
+          }),
+        ]
+      }),
+      El({
+        element:'div',
+        children:[
+          El({
+            element:'bUtton',
+            innerText:'Add to Cart',
+            className:'p-4 bg-black',
+          })
+        ]
+      })
+    ]
+  })
 	const renderPage = El({
 		element: "div",
 		className:
