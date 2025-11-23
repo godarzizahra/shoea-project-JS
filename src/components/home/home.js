@@ -1,37 +1,53 @@
+import { baseURL } from "../../api/config";
+import { userToken } from "../../utils/authUtils";
 import { El } from "../../utils/el";
-
+import { router } from "../../utils/router.js";
 //header
-const headerHome = El({
-	element: "div",
-	className: "flex w-full justify-between p-4",
-	children: [
-		El({
-			element: "div",
-			className: "flex flex-col",
-			children: [
-				El({
-					element: "span",
-					innerText: "Good Morning👋",
-					className: "text-2xl text-gray-400 text-xl font-bold",
-				}),
-				El({
-					element: "span",
-					className: "text-lg font-bold",
-					innerText: "Add username",
-					//Add username
-				}),
-			],
-		}),
-		El({
-			element: "div",
-			className: "flex items-center justify-center gap-3",
-			children: [
-				El({ element: "img", src: "/public/Vector (7).svg" }),
-				El({ element: "img", src: "/public/Vector (8).svg" }),
-			],
-		}),
-	],
-});
+
+async function getUserInfo() {
+	const userData = await fetch(`${baseURL}/user`, {
+		headers: {
+			Authorization: `Bearer ${userToken}`, // <-- اینجا درست شد
+		},
+	});
+	const username = await userData.json();
+	return username.username;
+}
+
+export async function createHeaderHome() {
+	const username = await getUserInfo();
+
+	return El({
+		element: "div",
+		className: "flex w-full justify-between p-4",
+		children: [
+			El({
+				element: "div",
+				className: "flex flex-col",
+				children: [
+					El({
+						element: "span",
+						innerText: "Good Morning👋",
+						className: "text-2xl text-gray-400 font-bold",
+					}),
+					El({
+						element: "span",
+						className: "text-lg font-bold",
+						innerText: username,
+					}),
+				],
+			}),
+			El({
+				element: "div",
+				className: "flex items-center justify-center gap-3",
+				children: [
+					El({ element: "img", src: "/public/Vector (7).svg" }),
+					El({ element: "img", src: "/public/Vector (8).svg" }),
+				],
+			}),
+		],
+	});
+}
 
 //search
 const search = El({
@@ -52,30 +68,99 @@ const search = El({
 	],
 });
 //Most Popular
-const selectBerand = El({
-	element: "div",
-	className: "flex flex-col w-full  py-2 px-2",
-	children: [
-		El({
-			element: "span",
-			innerText: "Most Popular",
-			className: "text-xl font-bold px-3 py-2",
-		}),
-		El({
-			element: "div",
-			className: "flex gap-3",
-			children: [
-				El({
-					element: "span",
-					innerText: "All",
-					className:
-						"border-2 px-7 py-3 text-xl font-bold border-gray-600 text-gray-600  rounded-4xl",
-				}),
-			],
-		}),
-	],
-});
+// -----------------------
+// Container for all brands (including "All")
+// -----------------------
+// const brandContainer = El({
+// 	element: "div",
+// 	className: "flex gap-3",
+// 	children: [
+// 		El({
+// 			element: "span",
+// 			innerText: "All",
+// 			className:
+// 				"border-2 px-7 py-3 text-xl font-bold border-gray-600 text-gray-600 rounded-4xl cursor-pointer",
+// 		}),
+// 	],
+// });
+
+// // -----------------------
+// // Function to create each brand element
+// // -----------------------
+// function createBrandItem(name) {
+// 	return El({
+// 		element: "span",
+// 		innerText: name,
+// 		className:
+// 			"border-2 px-7 py-3 text-xl font-bold border-gray-600 text-gray-600 rounded-4xl cursor-pointer capitalize",
+// 	});
+// }
+
+// // -----------------------
+// // Async function to fetch brands from API
+// // -----------------------
+// async function initBrands() {
+// 	try {
+// 		const response = await fetch(`${baseURL}/sneaker/brands`, {
+// 			headers: {
+// 				Authorization: `Bearer ${userToken}`,
+// 			},
+// 		});
+
+// 		if (!response.ok) throw new Error("Failed to fetch brands");
+
+// 		const brandList = await response.json();
+
+// 		brandList.forEach((brand) => {
+// 			brandContainer.appendChild(createBrandItem(brand));
+// 		});
+// 	} catch (err) {
+// 		console.error("Error loading brands:", err);
+// 		// Optionally, show a message in UI
+// 		brandContainer.appendChild(
+// 			El({
+// 				element: "span",
+// 				innerText: "Failed to load brands",
+// 				className: "text-red-500",
+// 			})
+// 		);
+// 	}
+// }
+
+// // -----------------------
+// // Initialize brands
+// // -----------------------
+// initBrands();
+
+// // -----------------------
+// // Final UI component
+// // -----------------------
+// export const selectBrand = El({
+// 	element: "div",
+// 	className: "flex flex-col w-full py-2 px-2",
+// 	children: [
+// 		El({
+// 			element: "span",
+// 			innerText: "Most Popular",
+// 			className: "text-2xl font-bold",
+// 		}),
+// 		brandContainer,
+// 	],
+// });
+
 //cart product
+// async function productsCart() {
+// 	const products = await fetch(`${baseURL}/sneaker?page=1&limit=100`, {
+// 		headers: {
+// 			Authorization: `Bearer ${sessionToken}`,
+// 		},
+// 	});
+// 	return products.json();
+// }
+
+// const productDataList = await productsCart();
+// console.log(productList.data);
+
 const cartProducts = El({
 	element: "div",
 	className: "grid grid-cols-2 h-[300px]",

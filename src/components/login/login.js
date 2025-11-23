@@ -1,3 +1,5 @@
+import { baseURL } from "../../api/config.js";
+import { setCookie } from "../../utils/authUtils.js";
 import { El } from "../../utils/el.js";
 import { router } from "../../utils/router.js";
 
@@ -33,14 +35,14 @@ export function Login() {
 	//---------------------------------
 	async function handleSubmit() {
 		try {
-			const response = await fetch("{{baseUrl}}/auth/login", {
+			const response = await fetch(`${baseURL}/auth/login`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",
 				},
 				body: JSON.stringify({
-					username: username,
-					password: password,
+					username: usernameValue,
+					password: passwordValue,
 				}),
 			});
 
@@ -53,11 +55,12 @@ export function Login() {
 
 			console.log("Login success:", data);
 
+			// localStorage.setItem("token", data.token);
+			setCookie("sessionToken", data.token);
 
-			localStorage.setItem("token", data.token);
+			// console.log(data);
 
-			router.navigate("/Home");
-
+			router.navigate("/Homepage");
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");
@@ -74,6 +77,17 @@ export function Login() {
 					"flex flex-col items-center gap-5 w-[428px] h-[926px] p-6 relative",
 
 				children: [
+					El({
+						element: "img",
+						src: "/public/Vector (3).svg",
+						className: "absolute left-6 top-4",
+						eventListener: [
+							{
+								event: "click",
+								callback: () => router.navigate("/swiper"),
+							},
+						],
+					}),
 					El({
 						element: "img",
 						src: "/public/logo.png",
