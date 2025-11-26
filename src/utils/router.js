@@ -1,17 +1,15 @@
-// Router ساده برای مدیریت مسیرها
-import { store } from "./store";
+// مسیر را مطابق پروژه‌ات تنظیم کن
 
+import { store } from "./store.js";
 function createRouter() {
 	let routes = {};
 	let currentRoute = "";
 	let currentParams = {};
 
-	// ثبت یک route جدید
 	function addRoute(path, component) {
 		routes[path] = component;
 	}
 
-	// تبدیل مسیر به pattern (مثلا /product/:id)
 	function pathToRegex(path) {
 		const keys = [];
 		const pattern = path
@@ -30,7 +28,6 @@ function createRouter() {
 		for (const routePath in routes) {
 			const { pattern, keys } = pathToRegex(routePath);
 			const match = path.match(pattern);
-
 			if (match) {
 				const params = {};
 				keys.forEach((key, index) => {
@@ -45,25 +42,21 @@ function createRouter() {
 		return null;
 	}
 
-	// دریافت مسیر از URL (از pathname استفاده می‌کنیم به جای hash)
 	function getHash() {
 		const pathname = window.location.pathname;
-		// اگر pathname فقط "/" است، "/" برمی‌گردانیم
 		return pathname === "/" ? "/" : pathname;
 	}
 
-	// ناوبری به یک مسیر (استفاده از History API)
 	function navigate(path) {
-		// اطمینان از اینکه path با / شروع می‌شود
 		const normalizedPath = path.startsWith("/") ? path : `/${path}`;
-		// استفاده از History API به جای hash
 		window.history.pushState({}, "", normalizedPath);
-		// فایر کردن رویداد popstate برای رندر
 		window.dispatchEvent(new PopStateEvent("popstate"));
 	}
 
-	// رندر کردن کامپوننت فعلی
-	function render(container) {
+	// -------------------------
+	// Async-aware render:
+	// -------------------------
+	async function render(container) {
 		const hash = getHash();
 		const matched = matchRoute(hash);
 
@@ -71,20 +64,43 @@ function createRouter() {
 			currentRoute = hash;
 			currentParams = matched.params;
 
-			// ذخیره route و params در store برای استفاده در کامپوننت‌ها
 			store.setState("currentRoute", hash);
 			store.setState("routeParams", matched.params);
 
-			// پاک کردن container
+			// clear container
 			container.innerHTML = "";
 
-			// رندر کردن کامپوننت
-			const componentElement = matched.component(matched.params);
-			if (componentElement) {
-				container.appendChild(componentElement);
+			try {
+				// call component (may return Node or Promise)
+				const maybePromise = matched.component(matched.params);
+
+				// If component returns a Promise, await it
+				const componentElement =
+					maybePromise instanceof Promise ? await maybePromise : maybePromise;
+
+				// if componentElement is a Node -> append, else if it's a string create text node
+				if (componentElement instanceof Node) {
+					container.appendChild(componentElement);
+				} else if (typeof componentElement === "string") {
+					container.appendChild(document.createTextNode(componentElement));
+				} else if (componentElement && componentElement.el instanceof Node) {
+					// in case your El util returns an object { el: node } — adapt if needed
+					container.appendChild(componentElement.el);
+				} else {
+					// fallback: show simple message (helps debugging)
+					container.innerHTML =
+						"<div class='p-6 text-center text-red-500'>Component did not return a valid DOM node.</div>";
+					console.error(
+						"Router: component returned invalid type:",
+						componentElement
+					);
+				}
+			} catch (err) {
+				console.error("Error while rendering component:", err);
+				container.innerHTML =
+					"<div class='p-6 text-center text-red-500'>Error loading page. Check console.</div>";
 			}
 		} else {
-			// اگر route پیدا نشد، به صفحه 404 یا home برو
 			if (hash !== "/") {
 				navigate("/");
 			} else {
@@ -94,32 +110,27 @@ function createRouter() {
 		}
 	}
 
-	// راه‌اندازی router
 	function init(container) {
-		// تابع برای رندر کردن با چک کردن تغییرات
 		const handleRouteChange = () => {
-			render(container);
+			// call render but don't block event loop
+			render(container).catch((err) =>
+				console.error("Router render error:", err)
+			);
 		};
 
-		// گوش دادن به تغییرات history (برای دکمه‌های back/forward و تغییرات دستی URL)
 		window.addEventListener("popstate", handleRouteChange);
 
-		// برای تشخیص تغییرات دستی URL در address bar
-		// یک polling mechanism اضافه می‌کنیم که هر 200ms pathname را چک می‌کند
 		const checkPathInterval = setInterval(() => {
 			const currentPath = getHash();
-			// اگر path تغییر کرده و با route فعلی متفاوت است، رندر می‌کنیم
 			if (currentPath !== currentRoute) {
 				handleRouteChange();
 			}
 		}, 200);
 
-		// تمیز کردن interval وقتی صفحه بسته می‌شود
 		window.addEventListener("beforeunload", () => {
 			clearInterval(checkPathInterval);
 		});
 
-		// همچنین وقتی کاربر focus را از صفحه برمی‌گرداند، چک می‌کنیم
 		window.addEventListener("focus", () => {
 			const currentPath = getHash();
 			if (currentPath !== currentRoute) {
@@ -127,16 +138,14 @@ function createRouter() {
 			}
 		});
 
-		// رندر اولیه
-		render(container);
+		// initial render
+		handleRouteChange();
 	}
 
-	// دریافت route فعلی
 	function getCurrentRoute() {
 		return currentRoute;
 	}
 
-	// دریافت params فعلی
 	function getCurrentParams() {
 		return currentParams;
 	}
@@ -150,5 +159,4 @@ function createRouter() {
 	};
 }
 
-// ایجاد یک instance مشترک از router
 export const router = createRouter();
