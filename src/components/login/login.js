@@ -7,9 +7,10 @@ export function Login() {
 	let usernameValue = "";
 	let passwordValue = "";
 	let passwordVisible = false;
-	//--------------------------
+
 	function updateButtonState() {
 		const btn = document.getElementById("submit-btn");
+		if (!btn) return;
 		if (usernameValue.trim() !== "" && passwordValue.trim() !== "") {
 			btn.classList.remove("opacity-50");
 			btn.classList.add("opacity-100");
@@ -21,25 +22,18 @@ export function Login() {
 		}
 	}
 
-	//  ---------------
 	function togglePassword() {
 		const input = document.getElementById("password");
+		if (!input) return;
 		passwordVisible = !passwordVisible;
-
-		if (passwordVisible) {
-			input.setAttribute("type", "text");
-		} else {
-			input.setAttribute("type", "password");
-		}
+		input.setAttribute("type", passwordVisible ? "text" : "password");
 	}
-	//---------------------------------
+
 	async function handleSubmit() {
 		try {
 			const response = await fetch(`${baseURL}/auth/login`, {
 				method: "POST",
-				headers: {
-					"Content-Type": "application/json",
-				},
+				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({
 					username: usernameValue,
 					password: passwordValue,
@@ -53,14 +47,9 @@ export function Login() {
 				return;
 			}
 
-			console.log("Login success:", data);
-
-			// localStorage.setItem("token", data.token);
 			setCookie("sessionToken", data.token);
 
-			// console.log(data);
-
-			router.navigate("/Homepage");
+			router.navigate("/home");
 		} catch (error) {
 			console.error("Error:", error);
 			alert("Server error");
@@ -75,17 +64,13 @@ export function Login() {
 				element: "div",
 				className:
 					"flex flex-col items-center gap-5 w-[428px] h-[926px] p-6 relative",
-
 				children: [
 					El({
 						element: "img",
 						src: "/public/Vector (3).svg",
 						className: "absolute left-6 top-4",
 						eventListener: [
-							{
-								event: "click",
-								callback: () => router.navigate("/swiper"),
-							},
+							{ event: "click", callback: () => router.navigate("/swiper") },
 						],
 					}),
 					El({
@@ -93,14 +78,12 @@ export function Login() {
 						src: "/public/logo.png",
 						className: "mt-15 mb-20",
 					}),
-
 					El({
 						element: "h1",
 						innerText: "Login to Your Account",
 						className: "text-3xl font-bold mb-8",
 					}),
 
-					// username
 					El({
 						element: "div",
 						className: "flex w-full relative",
@@ -128,7 +111,6 @@ export function Login() {
 						],
 					}),
 
-					//  password
 					El({
 						element: "div",
 						className: "w-full relative",
@@ -159,30 +141,20 @@ export function Login() {
 								className:
 									"absolute top-3 right-2 z-10 cursor-pointer opacity-70 ",
 								src: "/public/input-suffix.svg",
-								eventListener: [
-									{
-										event: "click",
-										callback: togglePassword,
-									},
-								],
+								eventListener: [{ event: "click", callback: togglePassword }],
 							}),
 						],
 					}),
 
-					//  signup
 					El({
 						element: "div",
 						innerText: "signup",
 						className: "mt-2 text-black cursor-pointer underline",
 						eventListener: [
-							{
-								event: "click",
-								callback: () => router.navigate("/Signup"),
-							},
+							{ event: "click", callback: () => router.navigate("/signup") },
 						],
 					}),
 
-					//  submit button
 					El({
 						element: "button",
 						innerText: "sign up",
@@ -190,12 +162,7 @@ export function Login() {
 						className:
 							"w-[390px] bg-black opacity-50 text-white py-3 rounded-3xl mt-4 absolute bottom-12",
 						attr: { disabled: true },
-						eventListener: [
-							{
-								event: "click",
-								callback: handleSubmit,
-							},
-						],
+						eventListener: [{ event: "click", callback: handleSubmit }],
 					}),
 				],
 			}),
