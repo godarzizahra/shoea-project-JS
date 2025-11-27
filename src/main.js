@@ -1,6 +1,8 @@
+import { SingleProduct } from "./components/home/singelProduct.js";
 import { Signup } from "./components/login/signup.js";
 import { swiper } from "./components/onboarding/swiper.js";
 import { welcome } from "./components/onboarding/welcome.js";
+import { Search } from "./components/search/search.js";
 import { Homepage } from "./pages/home/home.js";
 import { LoginPage } from "./pages/login/login.js";
 import { Onboardingpage } from "./pages/onboarding/onboarding.js";
@@ -18,6 +20,8 @@ router.addRoute("/swiper", swiper);
 router.addRoute("/login", LoginPage);
 router.addRoute("/signup", Signup);
 router.addRoute("/home", Homepage);
+router.addRoute("/single/:id", SingleProduct);
+router.addRoute("/search", Search);
 
 const token = getCookieValue("sessionToken");
 if (!token) {

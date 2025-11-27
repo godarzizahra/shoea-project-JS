@@ -3,6 +3,14 @@ import { getCookieValue } from "../../utils/authUtils.js";
 import { El } from "../../utils/el.js";
 import { router } from "../../utils/router.js";
 
+function resolveImageUrl(img) {
+	if (!img) return "/public/logo.png"; // fallback
+	if (img.startsWith("http://") || img.startsWith("https://")) return img;
+	// handle possible leading slash
+	if (img.startsWith("/")) return `${baseURL}${img}`;
+	return `${baseURL}/${img}`;
+}
+
 // create header placeholder
 function createHeaderPlaceholder() {
 	return El({
@@ -67,7 +75,7 @@ async function fillHeaderUsername(headerEl) {
 function createBrandContainer() {
 	const wrapper = El({
 		element: "div",
-		className: "w-full overflow-x-auto flex gap-3 pb-2 hide-scrollbar", // hide-scrollbar class handled below
+		className: "w-full overflow-x-auto flex gap-3 pb-2 hide-scrollbar",
 		attr: { "aria-label": "brand-list" },
 	});
 	return wrapper;
@@ -154,16 +162,16 @@ function createBottomMenu() {
 }
 //render product Card
 function renderProductCard(product) {
-	const imgUrl = product.imageURL || "/public/logo.png";
+	const imgUrl = resolveImageUrl(product.imageURL || product.images?.[0]);
 
-	return El({
+	const card = El({
 		element: "div",
-		className: "flex flex-col bg-white rounded-2xl p-3",
+		className: "flex flex-col  bg-white rounded-2xl p-3 cursor-pointer",
 		children: [
 			El({
 				element: "div",
 				className:
-					"bg-gray-100 p-4 rounded-xl w-full flex justify-center items-center",
+					"bg-gray-100 p-4 rounded-xl w-full flex justify-center items-center ",
 				children: [
 					El({
 						element: "img",
@@ -180,10 +188,16 @@ function renderProductCard(product) {
 			El({
 				element: "span",
 				innerText: `$ ${product.price}`,
-				className: "text-left text-gray-700 font-bold",
+				className: "text-left text-gray-700 font-bold ",
 			}),
 		],
 	});
+
+	card.addEventListener("click", () => {
+		router.navigate(`/single/${product.id}`);
+	});
+
+	return card;
 }
 
 // main Home function
@@ -218,6 +232,12 @@ export function Home() {
 				element: "input",
 				placeholder: "Search",
 				className: "bg-gray-100 rounded-sm w-full px-8 py-2",
+				eventListener: [
+					{
+						event: "click",
+						callback: () => router.navigate("/search"),
+					},
+				],
 			}),
 		],
 	});
